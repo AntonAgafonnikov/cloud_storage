@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtProcessingService {
 
-    public static final String SECRET_KEY = "24F58E789EF5B91C348F49129194D";
+    public static final String SECRET_KEY = "0293581a64c2356eb0c2307f78f4709973ea7074a24e4f1c2a010fa9f48da772";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -28,9 +28,10 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
+
     public String generateToken(Map<String, Object> extraClaims,
                                 UserDetails userDetails) {
         return Jwts.builder()
@@ -42,8 +43,21 @@ public class JwtService {
                 .compact();
     }
 
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals((userDetails.getUsername()))) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
     private Claims extractAllClaims(String token) {
-        return  Jwts
+        return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigninKey())
                 .build()
