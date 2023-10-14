@@ -2,10 +2,7 @@ package com.example.cloud_storage.model;
 
 import com.example.cloud_storage.role.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +16,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "_user")
+@Getter
+@Setter
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     private String firstname;
 
@@ -35,6 +34,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<FileDB> files;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

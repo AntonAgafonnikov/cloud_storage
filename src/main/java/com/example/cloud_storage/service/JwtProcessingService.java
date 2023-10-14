@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtProcessingService {
 
-    public static final String SECRET_KEY = "0293581a64c2356eb0c2307f78f4709973ea7074a24e4f1c2a010fa9f48da772";
+    public static final String SECRET_KEY = "qkDnFJGNvwC4QNAUW7PwM5eQp6nzu7i5jhfDY6xKx3M=";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -57,6 +57,7 @@ public class JwtProcessingService {
     }
 
     private Claims extractAllClaims(String token) {
+        token = token.substring(7);
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigninKey())
@@ -64,6 +65,17 @@ public class JwtProcessingService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+//    private Claims extractClaimsWithoutByte(String token) {
+//        token = token.substring(7);
+//        return Jwts
+//                .parserBuilder()
+//                .setSigningKey(getSigninKey())
+//                .build()
+//                .
+//                //.parseClaimsJws(token)
+//                .getBody();
+//    }
 
     private Key getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
