@@ -1,5 +1,6 @@
 package com.example.cloud_storage.filter;
 
+import com.example.cloud_storage.repository.BlackListTokenRepository;
 import com.example.cloud_storage.service.JwtProcessingService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,21 +23,28 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProcessingService jwtProcessingService;
-    public final UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService; //bilo public
+
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization"); //TODO Change to "auth-token"
+        final String authHeader = request.getHeader("auth-token"); //TODO Change to "auth-token"
         final String jwt;
         final String userEmail;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(7).split(" ")[1].trim(); //
-        userEmail = jwtProcessingService.extractUsername(jwt); //todo extract
+        jwt = authHeader; //jwt = authHeader.substring(7).split(" ")[1].trim(); //
+//        if (blackListTokenRepository.existsById(jwt)) {
+//            System.out.println(blackListTokenRepository.existsById(jwt)); //todo delete
+//            System.out.println("--->>>" + jwt);//todo delete
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+        userEmail = jwtProcessingService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtProcessingService.isTokenValid(jwt, userDetails)) {

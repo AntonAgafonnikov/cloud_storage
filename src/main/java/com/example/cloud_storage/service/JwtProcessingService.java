@@ -1,10 +1,12 @@
 package com.example.cloud_storage.service;
 
+import com.example.cloud_storage.repository.BlackListTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtProcessingService {
 
     public static final String SECRET_KEY = "qkDnFJGNvwC4QNAUW7PwM5eQp6nzu7i5jhfDY6xKx3M=";
+    private final BlackListTokenRepository blackListTokenRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,10 +49,12 @@ public class JwtProcessingService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals((userDetails.getUsername()))) && !isTokenExpired(token);
+        return (username.equals((userDetails.getUsername()))) && !isTokenExpired(token) &&
+                !blackListTokenRepository.existsById(token);
     }
 
     private boolean isTokenExpired(String token) {
+        System.out.println("method IsTokenExp token = " + token); // todo
         return extractExpiration(token).before(new Date());
     }
 

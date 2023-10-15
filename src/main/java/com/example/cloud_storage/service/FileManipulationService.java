@@ -1,5 +1,6 @@
 package com.example.cloud_storage.service;
 
+import com.example.cloud_storage.exception.ErrorBadRequest;
 import com.example.cloud_storage.model.FileDB;
 import com.example.cloud_storage.model.FileResponse;
 import com.example.cloud_storage.model.User;
@@ -7,16 +8,14 @@ import com.example.cloud_storage.repository.FileDBRepository;
 import com.example.cloud_storage.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
+//        throw new ErrorBadRequest("Error input data");
 @Service
 @RequiredArgsConstructor
 public class FileManipulationService {
@@ -24,75 +23,54 @@ public class FileManipulationService {
     private final FileDBRepository fileDBRepository;
     private final UserRepository userRepository;
 
-    public void loadFile(String email, String fileName, MultipartFile file) throws IOException {
-
-        User user = userRepository.findByEmail(email).get();
-
-        String filename = file.getOriginalFilename();
-
-        //String[] contentType = Objects.requireNonNull(file.getContentType()).split("/");
+    public void loadFile(String login, String fileName, MultipartFile file) throws IOException {
+        User user = getUserFromRepository(login);
+        //String filename = file.getOriginalFilename(); //todo - podstavit' filename?
         String type = file.getContentType();
-
         byte[] data = file.getBytes();
         long userId = user.getId();
 
+        fileDBRepository.saveFileInDB(fileName, type, data, userId);
         //FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), user);
-        fileDBRepository.saveFileInDB(filename, type, data, userId);
-        //fileDBRepository.saveAndFlush(fileDB);
+        //fileDBRepository.saveAndFlush(fileDB); //todo - poprobovati kak nibudi realizovat' cherez vstroennie metodi
     }
 
-//    public FileDB getFile(String id) {
-//        return fileDBRepository.findById(id).get();
-//    }
+    public List<FileResponse> getFilesFromServer(String login, int limit) {
+        User user = getUserFromRepository(login);
+        long id_user = user.getId();
+        return fileDBRepository.getUserFilesById(id_user, limit)
+                .stream()
+                .map(fileDB -> new FileResponse(fileDB.getName(), fileDB.getData().length))
+                        .collect(Collectors.toList());
 
-//    public Stream<FileDB> getAllFiles() {
-//        return fileDBRepository.findAll().stream();
-//    }
-
-    public List<FileResponse> getFilesFromServer(String email, int limit) {
-
-        long id_user = userRepository.findByEmail(email).get().getId();
-
-        List<FileDB> fileDBList = fileDBRepository.getUserFilesById(id_user, limit);
-        List<FileResponse> fileResponseList = new ArrayList<>();
-        fileDBList.forEach(fileDB -> {
-            fileResponseList.add(new FileResponse(fileDB.getName(), fileDB.getData().length));
-        });
-
-        /*
-         fileDBList.stream().forEach(fileDB -> {
-            fileResponseList.add(new FileResponse(fileDB.getName(), fileDB.getData().length));
-        });
-         */
-
-        return fileResponseList;
-
-                //fileDBList.get(1).getName()
-//                .map(fileDB ->
-//                        (
-//                            new FileResponse(fileDB.getName(), fileDB.getData().length)
-//                        )
-//        ).collect(Collectors.toList());
-
-//        System.out.println("--->>>" + fileDBRepository.findAll().stream()
-//                .map(
-//                        fileDB -> new FileResponse(fileDB.getName().substring(10), 766)
-//                )
-//                .toList());
-//        return fileDBRepository
-//                .findAll()
-//                .stream()
-//                .map(
-//                        fileDB -> new FileResponse(fileDB.getName().substring(10), 766)
-//                )
-//                .collect(Collectors.toList());
-
+//        List<FileDB> fileDBList = fileDBRepository.getUserFilesById(id_user, limit);
+//        List<FileResponse> fileResponseList = new ArrayList<>();
+//        fileDBList.forEach(fileDB -> {
+//            fileResponseList.add(new FileResponse(fileDB.getName(), fileDB.getData().length));
+//        });
+//        return fileResponseList; todo работает ли новая версия?
     }
 
-    public byte[] getFile(String email, String filename) throws IOException {
-        User user = userRepository.findByEmail(email).get();
-        //long userId = user.getId();
+    public byte[] getFile(String login, String filename) throws IOException {
+        User user = getUserFromRepository(login);
         FileDB fileDB = fileDBRepository.getFileDBByNameAndUser(filename, user);
         return fileDB.getBytes();
+    }
+
+    public void deleteFile(String login, String filename) {
+        User user = getUserFromRepository(login);
+        long userId = user.getId();
+        fileDBRepository.deleteFile(filename, userId);
+    }
+
+    public void editFileName(String login, String oldFileName, String newFileName) {
+        User user = getUserFromRepository(login);
+        long userId = user.getId();
+        fileDBRepository.editFileName(oldFileName, newFileName, userId);
+    }
+
+    private User getUserFromRepository(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new ErrorBadRequest("Error input data"));
     }
 }
