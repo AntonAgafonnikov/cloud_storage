@@ -1,6 +1,7 @@
-package com.example.cloud_storage.model;
+package com.example.cloud_storage.model.file;
 
 
+import com.example.cloud_storage.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,9 @@ public class FileDB implements MultipartFile {
     private byte[] data;
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id")
     public User user;
 
     @Override

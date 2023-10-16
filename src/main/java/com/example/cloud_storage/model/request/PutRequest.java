@@ -1,4 +1,4 @@
-package com.example.cloud_storage.model;
+package com.example.cloud_storage.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PutRequest {
-    private String name;
+    private String filename;
 }

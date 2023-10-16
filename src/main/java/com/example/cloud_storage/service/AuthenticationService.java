@@ -1,7 +1,8 @@
 package com.example.cloud_storage.service;
 
 import com.example.cloud_storage.exception.ErrorBadRequest;
-import com.example.cloud_storage.model.*;
+import com.example.cloud_storage.model.request.AuthenticationRequest;
+import com.example.cloud_storage.model.response.AuthenticationResponse;
 import com.example.cloud_storage.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

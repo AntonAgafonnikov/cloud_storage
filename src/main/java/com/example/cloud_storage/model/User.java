@@ -1,5 +1,6 @@
 package com.example.cloud_storage.model;
 
+import com.example.cloud_storage.model.file.FileDB;
 import com.example.cloud_storage.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
 
     private String login; // == username

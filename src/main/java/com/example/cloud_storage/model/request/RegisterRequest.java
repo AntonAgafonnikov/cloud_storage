@@ -1,4 +1,4 @@
-package com.example.cloud_storage.model;
+package com.example.cloud_storage.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class RegisterRequest {
+    private String firstname;
+    private String lastname;
     private String login;
     private String password;
 }

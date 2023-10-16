@@ -1,5 +1,6 @@
 package com.example.cloud_storage.filter;
 
+import com.example.cloud_storage.exception.ErrorBadRequest;
 import com.example.cloud_storage.repository.BlackListTokenRepository;
 import com.example.cloud_storage.service.JwtProcessingService;
 import jakarta.servlet.FilterChain;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

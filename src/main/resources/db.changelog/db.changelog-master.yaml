@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: migration/CreateTableUser.sql
+      relativeToChangeLogFile: true
+  - include:
+      file: migration/CreateTableFiles.sql
+      relativeToChangeLogFile: true
+  - include:
+      file: migration/CreateTableBlackListJwtTokens.sql
+      relativeToChangeLogFile: true
+  - include:
+      file: migration/InsertIntoTableUser.sql
+      relativeToChangeLogFile: true

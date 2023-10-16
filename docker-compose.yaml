@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  app:
+    image: 'cloudstorage:latest'
+    restart: always
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+#  Liquibase:
+#    # Image to be pulled from Docker Hub
+#    image: liquibase/liquibase:4.9.1
+#    # Name of the container
+#    container_name: Liquibase_container
+#    # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
+#    depends_on:
+#       - postgres
+#    # Volume to add the liquibase collection of scripts
+#    volumes:
+#      - /src/main/resources/db.changelog/db.changelog-master.yaml
+#    # Command to run the liquibase update service
+#    command: liquibase init start-h2
+
+  postgres:
+    image: 'postgres'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

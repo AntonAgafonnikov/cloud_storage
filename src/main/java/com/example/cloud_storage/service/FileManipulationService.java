@@ -1,8 +1,8 @@
 package com.example.cloud_storage.service;
 
 import com.example.cloud_storage.exception.ErrorBadRequest;
-import com.example.cloud_storage.model.FileDB;
-import com.example.cloud_storage.model.FileResponse;
+import com.example.cloud_storage.model.file.FileDB;
+import com.example.cloud_storage.model.response.FileResponse;
 import com.example.cloud_storage.model.User;
 import com.example.cloud_storage.repository.FileDBRepository;
 import com.example.cloud_storage.repository.UserRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +65,7 @@ public class FileManipulationService {
     public void editFileName(String login, String oldFileName, String newFileName) {
         User user = getUserFromRepository(login);
         long userId = user.getId();
+        System.out.println("Old = " + oldFileName + " . NEW = " + newFileName + " . ID = " + userId); //todo
         fileDBRepository.editFileName(oldFileName, newFileName, userId);
     }
 

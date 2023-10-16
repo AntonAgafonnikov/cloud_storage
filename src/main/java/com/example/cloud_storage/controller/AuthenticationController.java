@@ -1,8 +1,7 @@
 package com.example.cloud_storage.controller;
 
-import com.example.cloud_storage.model.AuthenticationRequest;
-import com.example.cloud_storage.model.AuthenticationResponse;
-import com.example.cloud_storage.model.RegisterRequest;
+import com.example.cloud_storage.model.request.AuthenticationRequest;
+import com.example.cloud_storage.model.response.AuthenticationResponse;
 import com.example.cloud_storage.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

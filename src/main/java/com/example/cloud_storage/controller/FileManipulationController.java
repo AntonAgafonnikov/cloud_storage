@@ -2,8 +2,8 @@ package com.example.cloud_storage.controller;
 
 import com.example.cloud_storage.exception.ErrorBadRequest;
 import com.example.cloud_storage.exception.ErrorUnauthorizedException;
-import com.example.cloud_storage.model.FileResponse;
-import com.example.cloud_storage.model.PutRequest;
+import com.example.cloud_storage.model.response.FileResponse;
+import com.example.cloud_storage.model.request.PutRequest;
 import com.example.cloud_storage.service.FileManipulationService;
 import com.example.cloud_storage.service.JwtProcessingService;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class FileManipulationController {
     {
         String login = extractLogin(authToken);
         if (isTokenValid(authToken, login)) {
-            fileManipulationService.editFileName(login, oldFileName, newFileName.getName());
+            fileManipulationService.editFileName(login, oldFileName, newFileName.getFilename());
         }
     }
 

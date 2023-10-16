@@ -1,4 +1,4 @@
-package com.example.cloud_storage.model;
+package com.example.cloud_storage.model.response;
 
 import lombok.Data;
 

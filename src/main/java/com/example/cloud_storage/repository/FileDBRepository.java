@@ -1,7 +1,7 @@
 package com.example.cloud_storage.repository;
 
-import com.example.cloud_storage.model.FileDB;
-import com.example.cloud_storage.model.FileDBId;
+import com.example.cloud_storage.model.file.FileDB;
+import com.example.cloud_storage.model.file.FileDBId;
 import com.example.cloud_storage.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -35,7 +35,7 @@ create table _files (
 
 insert into _files (name, type, data, user_id)
 values
-    ('Docdoc', 'txt', "17453", 2),
+    ('Docdoc', 'txt', '17453', 2),
     ('IMAGEpng', 'png', "20000", 1),
     ('refdoc', 'txt', "3000", 3)
 ;
