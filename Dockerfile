@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim-buster
 
-EXPOSE 8080
+EXPOSE 8087
 
 COPY target/cloud_storage-0.0.1-SNAPSHOT.jar app.jar
 
