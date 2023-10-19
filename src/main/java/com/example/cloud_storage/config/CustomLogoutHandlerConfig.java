@@ -1,5 +1,6 @@
 package com.example.cloud_storage.config;
 
+import com.example.cloud_storage.exception.ErrorUnauthorizedException;
 import com.example.cloud_storage.repository.BlackListTokenRepository;
 import com.example.cloud_storage.service.AuthenticationService;
 import com.example.cloud_storage.service.JwtProcessingService;
@@ -30,10 +31,9 @@ public class CustomLogoutHandlerConfig implements LogoutHandler {
             String username = jwtProcessingService.extractUsername(token);
             if(jwtProcessingService.isTokenValid(token, userDetailsService.loadUserByUsername(username)) ||
                     !blackListTokenRepository.existsById(token)) {
-                System.out.println("--->>> Logout");
                 logoutService.exitUser(token);
             } else {
-                throw new RuntimeException("Ne valid"); //todo
+                throw new ErrorUnauthorizedException("Error input data"); //todo
             }
     }
 }

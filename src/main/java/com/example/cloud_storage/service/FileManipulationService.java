@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//        throw new ErrorBadRequest("Error input data");
 @Service
 @RequiredArgsConstructor
 public class FileManipulationService {
@@ -24,14 +23,10 @@ public class FileManipulationService {
 
     public void loadFile(String login, String fileName, MultipartFile file) throws IOException {
         User user = getUserFromRepository(login);
-        //String filename = file.getOriginalFilename(); //todo - podstavit' filename?
         String type = file.getContentType();
         byte[] data = file.getBytes();
         long userId = user.getId();
-
         fileDBRepository.saveFileInDB(fileName, type, data, userId);
-        //FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), user);
-        //fileDBRepository.saveAndFlush(fileDB); //todo - poprobovati kak nibudi realizovat' cherez vstroennie metodi
     }
 
     public List<FileResponse> getFilesFromServer(String login, int limit) {
@@ -41,13 +36,6 @@ public class FileManipulationService {
                 .stream()
                 .map(fileDB -> new FileResponse(fileDB.getName(), fileDB.getData().length))
                         .collect(Collectors.toList());
-
-//        List<FileDB> fileDBList = fileDBRepository.getUserFilesById(id_user, limit);
-//        List<FileResponse> fileResponseList = new ArrayList<>();
-//        fileDBList.forEach(fileDB -> {
-//            fileResponseList.add(new FileResponse(fileDB.getName(), fileDB.getData().length));
-//        });
-//        return fileResponseList; todo работает ли новая версия?
     }
 
     public byte[] getFile(String login, String filename) throws IOException {

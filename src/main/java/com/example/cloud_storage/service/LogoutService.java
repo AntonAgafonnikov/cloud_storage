@@ -3,7 +3,6 @@ package com.example.cloud_storage.service;
 import com.example.cloud_storage.model.JwtToken;
 import com.example.cloud_storage.repository.BlackListTokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service

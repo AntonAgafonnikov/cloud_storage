@@ -27,24 +27,9 @@ public class JwtProcessingService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims,
-                                UserDetails userDetails) {
-        return Jwts.builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 60_000 * 24))
-                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
-                .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -53,8 +38,23 @@ public class JwtProcessingService {
                 !blackListTokenRepository.existsById(token);
     }
 
+    private  <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private String generateToken(Map<String, Object> extraClaims,
+                                UserDetails userDetails) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 60_000 * 60))
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     private boolean isTokenExpired(String token) {
-        System.out.println("method IsTokenExp token = " + token); // todo
         return extractExpiration(token).before(new Date());
     }
 
@@ -71,17 +71,6 @@ public class JwtProcessingService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-//    private Claims extractClaimsWithoutByte(String token) {
-//        token = token.substring(7);
-//        return Jwts
-//                .parserBuilder()
-//                .setSigningKey(getSigninKey())
-//                .build()
-//                .
-//                //.parseClaimsJws(token)
-//                .getBody();
-//    }
 
     private Key getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
