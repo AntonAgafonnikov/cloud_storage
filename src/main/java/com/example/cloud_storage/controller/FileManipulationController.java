@@ -2,6 +2,7 @@ package com.example.cloud_storage.controller;
 
 import com.example.cloud_storage.exception.ErrorBadRequest;
 import com.example.cloud_storage.exception.ErrorUnauthorizedException;
+import com.example.cloud_storage.model.request.AuthenticationRequest;
 import com.example.cloud_storage.model.response.FileResponse;
 import com.example.cloud_storage.model.request.PutRequest;
 import com.example.cloud_storage.service.FileManipulationService;

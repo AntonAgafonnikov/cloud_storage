@@ -5,4 +5,3 @@ values
     ('sam', '$2a$10$yfOj9fqUxKAJdoA4rAcfS.WiBAR1BQze2kbA.15Zkw7wncYL.TVnG', 'USER'),
     ('din', '$2a$10$yfOj9fqUxKAJdoA4rAcfS.WiBAR1BQze2kbA.15Zkw7wncYL.TVnG', 'USER')
 ;
-

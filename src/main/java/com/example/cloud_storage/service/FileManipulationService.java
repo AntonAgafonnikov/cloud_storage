@@ -53,11 +53,10 @@ public class FileManipulationService {
     public void editFileName(String login, String oldFileName, String newFileName) {
         User user = getUserFromRepository(login);
         long userId = user.getId();
-        System.out.println("Old = " + oldFileName + " . NEW = " + newFileName + " . ID = " + userId); //todo
         fileDBRepository.editFileName(oldFileName, newFileName, userId);
     }
 
-    private User getUserFromRepository(String login) {
+    public User getUserFromRepository(String login) {
         return userRepository.findByLogin(login)
                 .orElseThrow(() -> new ErrorBadRequest("Error input data"));
     }

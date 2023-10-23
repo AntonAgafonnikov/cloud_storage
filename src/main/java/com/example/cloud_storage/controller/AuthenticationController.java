@@ -17,4 +17,10 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> entryUser(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+
+
+    @PostMapping("/testpost")
+    public void tesPost() {
+        System.out.println("--->>> Post" );
+    }
 }
